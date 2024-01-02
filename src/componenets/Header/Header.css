@@ -4,6 +4,9 @@
     align-items: center;
     height: 60px;
     background: black;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header__logo {

@@ -1,0 +1,23 @@
+/** @format */
+
+.home__img {
+    width: 100%;
+    z-index: -1;
+    margin-bottom: -150px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+.home_row {
+    display: flex;
+    z-index: 1;
+    /* margin: 0 35px; */
+}
+.home_row {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.home {
+    margin: 0 auto;
+    max-width: 1500px;
+}
