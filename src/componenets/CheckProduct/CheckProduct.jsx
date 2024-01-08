@@ -4,8 +4,13 @@ import React from "react";
 import "./CheckProduct.css";
 import { useStateValue } from "../../stateProvider";
 const CheckProduct = (id, image, title, price, rating) => {
-    const [{ basket }] = useStateValue();
-    console.log(basket);
+    const [dispatch] = useStateValue();
+    const removeFromBasket = () => {
+        dispatch({
+            type: "REMOVE_FROM_BASKET",
+            id: id,
+        });
+    };
     return (
         <div className='checkproduct'>
             <img
@@ -28,7 +33,7 @@ const CheckProduct = (id, image, title, price, rating) => {
                             <p>⭐</p>
                         ))}
                 </div>
-                <button>Remove from Basket</button>
+                <button onClick={removeFromBasket}>Remove from Basket</button>
             </div>
         </div>
     );
