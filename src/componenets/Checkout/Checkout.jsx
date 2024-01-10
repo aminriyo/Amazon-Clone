@@ -1,23 +1,22 @@
 /** @format */
 
 import React from "react";
-import "./Checkout.css";
-import Subtotal from "../Subtotal/Subtotal";
 import CheckProduct from "../CheckProduct/CheckProduct";
+import Subtotal from "../Subtotal/Subtotal";
+import "./Checkout.css";
 import { useStateValue } from "../../stateProvider";
-const Checkout = () => {
-    const [{ basket }] = useStateValue();
-    console.log(basket);
+function Checkout() {
+    const [{ basket }, dispatch] = useStateValue();
     return (
         <div className='checkout'>
             <div className='checkout__left'>
                 <img
-                    className='checkout__left--img'
+                    className='checkout__ad'
                     src='https://images-na.ssl-images-amazon.com/images/G/02/UK_CCMP/TM/OCC_Amazon1._CB423492668_.jpg'
-                    alt='checkout images'
+                    alt=''
                 />
                 <h3>Hello</h3>
-                <h2 className='checkout__title'> Your shopping Basket</h2>
+                <h2 className='checkout__title'>Your Shopping Basket</h2>
                 {basket.map((item) => (
                     <CheckProduct
                         id={item.id}
@@ -33,6 +32,6 @@ const Checkout = () => {
             </div>
         </div>
     );
-};
+}
 
 export default Checkout;

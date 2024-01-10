@@ -26,7 +26,9 @@ const Header = () => {
             <div className='header__nav'>
                 <div className='header__nav--option'>
                     <span className='option--one'>HelloGuest</span>
-                    <span className='option--two'>Sign in</span>
+                    <Link to={"/login"} className="header__links">
+                        <span className='option--two'>Sign in</span>
+                    </Link>
                 </div>
                 <div className='header__nav--option'>
                     <span className='option--one'>Returns</span>

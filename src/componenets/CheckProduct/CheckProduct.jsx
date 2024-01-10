@@ -1,10 +1,11 @@
 /** @format */
 
 import React from "react";
+
 import "./CheckProduct.css";
 import { useStateValue } from "../../stateProvider";
-const CheckProduct = (id, image, title, price, rating) => {
-    const [dispatch] = useStateValue();
+function CheckProduct({ id, image, title, price, rating, hideButton }) {
+    const [{ basket }, dispatch] = useStateValue();
     const removeFromBasket = () => {
         dispatch({
             type: "REMOVE_FROM_BASKET",
@@ -12,31 +13,29 @@ const CheckProduct = (id, image, title, price, rating) => {
         });
     };
     return (
-        <div className='checkproduct'>
-            <img
-                className='checkproduct__image'
-                src={image}
-                alt='product image'
-            />
-
-            <div className='checkproduct__info'>
-                <p className='checkproduct__title'>{title}</p>
-                <p className='checkproduct__price'>
+        <div className='checkoutProduct'>
+            <img className='checkoutProduct_image' src={image} alt='' />
+            <div className='checkoutProduct_info'>
+                <p className='checkoutProduct_title'>{title}</p>
+                <p className='checkoutProduct_price'>
                     <small>$</small>
                     <strong>{price}</strong>
                 </p>
-
-                <div className='checkproduct__rating'>
+                <div className='checkoutProduct_rating'>
                     {Array(rating)
                         .fill()
-                        .map(() => (
-                            <p>⭐</p>
+                        .map((_, i) => (
+                            <p key={i}>🌟</p>
                         ))}
                 </div>
-                <button onClick={removeFromBasket}>Remove from Basket</button>
+                {!hideButton && (
+                    <button onClick={removeFromBasket}>
+                        Remove from Basket
+                    </button>
+                )}
             </div>
         </div>
     );
-};
+}
 
 export default CheckProduct;

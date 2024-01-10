@@ -5,6 +5,7 @@ import Checkout from "./componenets/Checkout/Checkout";
 import Header from "./componenets/Header/Header";
 import Home from "./componenets/Home/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./componenets/Login/Login";
 
 function App() {
     return (
@@ -28,6 +29,16 @@ function App() {
                             <>
                                 <Header />
                                 <Checkout />
+                            </>
+                        }
+                    />
+                </Routes>
+                <Routes>
+                    <Route
+                        path='/login'
+                        element={
+                            <>
+                                <Login />
                             </>
                         }
                     />
