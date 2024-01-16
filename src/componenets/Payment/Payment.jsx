@@ -2,15 +2,79 @@
 
 import React from "react";
 import "./Payment.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStateValue } from "../../stateProvider";
 import CheckProduct from "../CheckProduct/CheckProduct";
 import CurrencyFormat from "react-currency-format";
-import { CardElement } from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "../../axios";
 const Payment = () => {
     const [{ basket, user }] = useStateValue();
+    const Navigate = useNavigate();
+    const stripe = useStripe();
+    const elements = useElements();
     const getBasketTotal = (basket) =>
         basket?.reduce((amount, item) => amount + Number(item.price), 0);
+
+    // states use for the button
+    const [disabled, setDisabled] = useState(true);
+    const [error, setError] = useState(null);
+    const [processing, setProcessing] = useState("");
+    const [succeeded, setSucceeded] = useState(false);
+
+    // finding clientsecret
+    const [clientSecret, setClientSeceret] = useState(true);
+
+    // useeffect
+    useEffect(() => {
+        const getClientSecret = async () => {
+            try {
+                const response = await axios({
+                    method: "post",
+                    withCredentials: false,
+                    url: `/payments/create?total=${
+                        getBasketTotal(basket) * 100
+                    }`,
+                });
+                console.log(response);
+                setClientSeceret(response.data.clientSecret);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getClientSecret();
+    }, [basket]);
+    console.log("the secret is >>>", clientSecret);
+    // for form onsubmit
+    const handleSumbit = async (event) => {
+        event.preventDefault();
+        setProcessing(true);
+        const payload = await stripe
+            .confirmCardPayment(clientSecret, {
+                payment_mehtod: {
+                    card: elements.getElement(CardElement),
+                },
+            })
+            .then(({ paymentIntent }) => {
+                console.log(paymentIntent);
+                setSucceeded(true);
+                setError(null);
+                setProcessing(false);
+
+                Navigate("/orders");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    // for  cardelement
+    const handleChange = (event) => {
+        setDisabled(event.empty);
+        setError(event.error ? event.error.message : "");
+    };
     return (
         <div className='payment'>
             <div className='payment__container'>
@@ -53,9 +117,9 @@ const Payment = () => {
                     </div>
 
                     <div className='payment__details'>
-                        <form>
+                        <form onSubmit={handleSumbit}>
                             {/* cardelement */}
-                            <CardElement />
+                            <CardElement onChange={handleChange} />
                             <div className='payment__price'>
                                 <CurrencyFormat
                                     renderText={(value) => (
@@ -67,10 +131,22 @@ const Payment = () => {
                                     thousandSeparator={true}
                                     prefix={"$"}
                                 />
-                                <button>
-                                    <span>Buy Now</span>
+                                <button
+                                    disabled={
+                                        disabled || processing || succeeded
+                                    }
+                                >
+                                    <span>
+                                        {" "}
+                                        {processing ? (
+                                            <h3>Processing</h3>
+                                        ) : (
+                                            "Buy Now "
+                                        )}
+                                    </span>
                                 </button>
                             </div>
+                            {error && <div>{error}</div>}
                         </form>
                     </div>
                 </div>

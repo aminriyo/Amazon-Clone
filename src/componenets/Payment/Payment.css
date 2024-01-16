@@ -1,23 +1,17 @@
 /** @format */
-.payment {
-    background: #ffffff;
-}
 
-.payment__container {
-    text-align: center;
-    /* padding: 10px; */
-    font-weight: 400;
-    /* background-color: rgb(234, 237, 237);z */
-    border-bottom: 1px solid lightgray;
+.payment {
+    background-color: white;
 }
 
 .payment__container > h1 {
-    background-color: #eaeded;
-    border-bottom: 1px solid #d3d3d3;
-    font-weight: 400;
-    padding: 10px;
     text-align: center;
+    padding: 10px;
+    font-weight: 400;
+    background-color: rgb(234, 237, 237);
+    border-bottom: 1px solid lightgray;
 }
+
 .payment__container > h1 a {
     text-decoration: none;
 }
@@ -30,21 +24,23 @@
 }
 
 .payment__title {
-    flex: 0.2 1;
+    flex: 1;
 }
 
 .payment__address,
-.payment__details,
-.payment__items {
-    flex: 0.8 1;
+.payment__items,
+.payment__details {
+    flex: 4;
 }
 .payment__details > form {
     max-width: 400px;
 }
-.payment__details > h3 {
+
+.payment__price > h3 {
     padding-bottom: 20px;
 }
-.payment__details > form > div > button {
+
+.payment__details button {
     background: #f0c14b;
     border-radius: 2px;
     width: 100%;

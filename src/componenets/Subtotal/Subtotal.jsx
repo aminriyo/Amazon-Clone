@@ -7,7 +7,7 @@ import CurrencyFormat from "react-currency-format";
 import { useStateValue } from "../../stateProvider";
 import { useNavigate } from "react-router-dom";
 function Subtotal() {
-    const [{ basket }, dispatch] = useStateValue();
+    const [{ basket }] = useStateValue();
     const navigate = useNavigate();
     const getBasketTotal = (basket) =>
         basket?.reduce((amount, item) => amount + Number(item.price), 0);
