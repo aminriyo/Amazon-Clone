@@ -91,6 +91,13 @@ function App() {
                         }
                     />
                 </Routes>
+                {/* orders */}
+                <Routes>
+                    <Route
+                        path='/orders'
+                        element={<h1>well done this is order page </h1>}
+                    />
+                </Routes>
             </Router>
         </div>
     );

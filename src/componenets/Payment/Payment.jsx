@@ -25,9 +25,10 @@ const Payment = () => {
     const [succeeded, setSucceeded] = useState(false);
 
     // finding clientsecret
-    const [clientSecret, setClientSeceret] = useState(true);
+    const [clientSecret, setClientSecret] = useState(true);
 
     // useeffect
+    // getting clientsecret code from stripe
     useEffect(() => {
         const getClientSecret = async () => {
             try {
@@ -39,7 +40,7 @@ const Payment = () => {
                     }`,
                 });
                 console.log(response);
-                setClientSeceret(response.data.clientSecret);
+                setClientSecret(response.data.clientSecret);
             } catch (error) {
                 console.log(error);
             }
@@ -47,27 +48,35 @@ const Payment = () => {
         getClientSecret();
     }, [basket]);
     console.log("the secret is >>>", clientSecret);
-    // for form onsubmit
+
+    // Payment confirmation for form onSubmit
     const handleSumbit = async (event) => {
         event.preventDefault();
         setProcessing(true);
-        const payload = await stripe
-            .confirmCardPayment(clientSecret, {
-                payment_mehtod: {
-                    card: elements.getElement(CardElement),
-                },
-            })
-            .then(({ paymentIntent }) => {
-                console.log(paymentIntent);
-                setSucceeded(true);
-                setError(null);
-                setProcessing(false);
 
-                Navigate("/orders");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            const { paymentIntent } = await stripe.confirmCardPayment(
+                clientSecret,
+                {
+                    payment_method: {
+                        card: elements.getElement(CardElement),
+                    },
+                }
+            );
+
+            // Payment confirmation logic
+            setSucceeded(true);
+            setError(null);
+            setProcessing(false);
+            console.log(paymentIntent);
+            // Navigate to the order page
+            Navigate("/orders");
+        } catch (error) {
+            // Handle errors
+            console.error(error);
+            setProcessing(false);
+            setError(`Payment failed: ${error.message}`);
+        }
     };
 
     // for  cardelement
