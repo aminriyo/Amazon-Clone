@@ -10,8 +10,9 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "../../axios";
+import { db } from "../../firebase";
 const Payment = () => {
-    const [{ basket, user }] = useStateValue();
+    const [{ basket, user }, dispatch] = useStateValue();
     const Navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
@@ -63,12 +64,26 @@ const Payment = () => {
                     },
                 }
             );
-
+            // database
+            db.collection("users")
+                .doc(user?.uid)
+                .collection("orders")
+                .doc(paymentIntent.id)
+                .set({
+                    basket: basket,
+                    amount: paymentIntent.amount,
+                    created: paymentIntent.created,
+                });
             // Payment confirmation logic
             setSucceeded(true);
             setError(null);
             setProcessing(false);
             console.log(paymentIntent);
+
+            // make the basket empty
+            dispatch({
+                type: "EMPTY_BASKET",
+            });
             // Navigate to the order page
             Navigate("/orders");
         } catch (error) {
