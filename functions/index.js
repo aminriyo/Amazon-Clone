@@ -16,7 +16,7 @@ app.use(
 );
 app.use(express.json());
 
-app.get("/", (req, res) => res.status(200).send("Hello word"));
+app.get("/", (req, res) => res.status(200).send("Hello world"));
 
 app.post("/payments/create", async (request, response) => {
     const total = request.query.total;
